@@ -17,13 +17,21 @@
 //     return $content;
 // }
 
+class WordCountAndTimePlugin {
+    function __construct() {
+        add_action('admin_menu', array($this, 'adminPage'));
+    }
 
-add_action('admin_menu', 'ourPluginsSettingsLink');
-
-function ourPluginsSettingsLink() {
-    add_options_page('Word Count Settings', 'Word Count', 'manage_options', 'word-count-settings-page', 'ourSettingsPageHTML');
+    function adminPage() {
+        add_options_page('Word Count Settings', 'Word Count', 'manage_options', 'word-count-settings-page', array($this, 'ourHTML'));
+    }
+    
+    function ourHTML() { ?>
+    Hello 
+    <?php }
 }
 
-function ourSettingsPageHTML() { ?>
-Hello 
-<?php }
+$wordCountAndTimePlugin = new WordCountAndTimePlugin();
+
+
+
