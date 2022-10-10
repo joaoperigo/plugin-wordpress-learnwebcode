@@ -11,5 +11,8 @@
 add_filter('the_content', 'addToEndOfPost');
 
 function addToEndOfPost($content) {
-    return $content . '<p>My name is Joao</p>'; // concatenate to add this <p> after content besides substitute it
+    if (is_page() && is_main_Query()) {
+        return $content . '<p>My name is Joao</p>';
+    }
+    return $content;
 }
