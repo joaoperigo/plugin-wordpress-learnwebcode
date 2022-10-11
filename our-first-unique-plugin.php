@@ -8,19 +8,32 @@
     Author URI: https://zapiens.com.br
 */
 
-// add_filter('the_content', 'addToEndOfPost');
-
-// function addToEndOfPost($content) {
-//     if (is_page() && is_main_Query()) {
-//         return $content . '<p>My name is Joao</p>';
-//     }
-//     return $content;
-// }
-
 class WordCountAndTimePlugin {
     function __construct() {
         add_action('admin_menu', array($this, 'adminPage'));
         add_action('admin_init', array($this, 'settings'));
+        add_filter('the_content', array($this, 'ifWrap'));
+    }
+
+    function ifWrap($content) {
+        if( is_main_query() AND is_single() AND 
+        (
+            get_option('wcp_wordcount', '1') OR 
+            get_option('wcp_charactercount', '1') OR 
+            get_option('wcp_readtime', '1')
+        )) {
+            return $this->createHTML($content);
+        }
+        return $content;
+    }
+
+    function createHTML($content) {
+        $html = '<h3>'. get_option('wcp_headline', 'Post Statistics') . '</h3><p>';
+
+        if(get_option('wcp_location', '0') == '0') {
+            return $html . $content;
+        }
+        return $content . $html;
     }
 
     function settings() {
