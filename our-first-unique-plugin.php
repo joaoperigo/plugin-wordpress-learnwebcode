@@ -25,9 +25,38 @@ class WordCountAndTimePlugin {
 
     function settings() {
         add_settings_section('wcp_first_section', null, null, 'word-count-settings-page');
+
         add_settings_field('wcp_location', 'Display Location', array($this, 'locationHTML'), 'word-count-settings-page', 'wcp_first_section');
-        register_setting('wordcountplugin','wcp_location',array('sanitize_callback' => 'sanitize_text_field', 'default' => '0')); // sanitize_text_field is WP function to sanitize
+        register_setting('wordcountplugin','wcp_location',array('sanitize_callback' => 'sanitize_text_field', 'default' => '0'));
+
+        add_settings_field('wcp_headline', 'Headline Text', array($this, 'headlineHTML'), 'word-count-settings-page', 'wcp_first_section');
+        register_setting('wordcountplugin','wcp_headline',array('sanitize_callback' => 'sanitize_text_field', 'default' => 'Post Statistics'));
+
+        add_settings_field('wcp_wordcount', 'Word Count', array($this, 'wordcountHTML'), 'word-count-settings-page', 'wcp_first_section');
+        register_setting('wordcountplugin','wcp_wordcount',array('sanitize_callback' => 'sanitize_text_field', 'default' => '1'));
+
+        add_settings_field('wcp_charactercount', 'Character Count', array($this, 'charactercountHTML'), 'word-count-settings-page', 'wcp_first_section');
+        register_setting('wordcountplugin','wcp_charactercount',array('sanitize_callback' => 'sanitize_text_field', 'default' => '1'));
+
+        add_settings_field('wcp_readtime', 'Read Time', array($this, 'readtimeHTML'), 'word-count-settings-page', 'wcp_first_section');
+        register_setting('wordcountplugin','wcp_readtime',array('sanitize_callback' => 'sanitize_text_field', 'default' => '1'));
     }
+
+    function charactercountHTML() { ?>
+        <input type="checkbox" name="wcp_charactercount" value="1" <?php checked(get_option('wcp_charactercount'), '1') ?> >
+    <?php }
+
+    function readtimeHTML() { ?>
+        <input type="checkbox" name="wcp_readtime" value="1" <?php checked(get_option('wcp_readtime'), '1') ?> >
+    <?php }
+
+    function wordcountHTML() { ?>
+        <input type="checkbox" name="wcp_wordcount" value="1" <?php checked(get_option('wcp_wordcount'), '1') ?> >
+    <?php }
+
+    function headlineHTML() { ?>
+        <input type="text" name="wcp_headline" value="<?php echo esc_attr(get_option('wcp_headline')); // esc_attr for security ?>"> 
+    <?php }
 
     function locationHTML() { ?>
         <select name="wcp_location">
