@@ -27,7 +27,7 @@ class WordCountAndTimePlugin {
         add_settings_section('wcp_first_section', null, null, 'word-count-settings-page');
 
         add_settings_field('wcp_location', 'Display Location', array($this, 'locationHTML'), 'word-count-settings-page', 'wcp_first_section');
-        register_setting('wordcountplugin','wcp_location',array('sanitize_callback' => 'sanitize_text_field', 'default' => '0'));
+        register_setting('wordcountplugin','wcp_location',array('sanitize_callback' => array($this, 'sanitizeLocation'), 'default' => '0'));
 
         add_settings_field('wcp_headline', 'Headline Text', array($this, 'headlineHTML'), 'word-count-settings-page', 'wcp_first_section');
         register_setting('wordcountplugin','wcp_headline',array('sanitize_callback' => 'sanitize_text_field', 'default' => 'Post Statistics'));
@@ -40,6 +40,14 @@ class WordCountAndTimePlugin {
 
         add_settings_field('wcp_readtime', 'Read Time', array($this, 'readtimeHTML'), 'word-count-settings-page', 'wcp_first_section');
         register_setting('wordcountplugin','wcp_readtime',array('sanitize_callback' => 'sanitize_text_field', 'default' => '1'));
+    }
+
+    function sanitizeLocation($input) {
+        if($input != '0' AND $input != '1') {
+            add_settings_error('wcp_location', 'wcp_location_error', 'Display location must be either beginning or end');
+            return get_option('wcp_location');
+        }
+        return $input;
     }
 
     function charactercountHTML() { ?>
